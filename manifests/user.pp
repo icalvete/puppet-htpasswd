@@ -1,5 +1,12 @@
-define htpasswd::user($password, $file, $ensure = present, $encryption = md5)
-{
+define htpasswd::user(
+
+  $user = $name,
+  $password,
+  $file,
+  $ensure = present,
+  $encryption = md5
+
+) {
 
   include apache2::utils
 
@@ -20,9 +27,9 @@ define htpasswd::user($password, $file, $ensure = present, $encryption = md5)
   }
 
   case $ensure {
-    absent:     { $cmd = "htpasswd -b -D $file ${name}" }
-    present:    { $cmd = "htpasswd -b ${enctype} $file ${name} ${password}" }
-    default:    { $cmd = "htpasswd -b ${enctype} $file ${name} ${password}" }
+    absent:     { $cmd = "htpasswd -b -D $file ${user}" }
+    present:    { $cmd = "htpasswd -b ${enctype} $file ${user} ${password}" }
+    default:    { $cmd = "htpasswd -b ${enctype} $file ${user} ${password}" }
   }
 
   exec {"manage_user_${name}":
