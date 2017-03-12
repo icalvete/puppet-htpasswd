@@ -1,12 +1,16 @@
-define htpasswd::user(
+define htpasswd::user (
 
-  $user = $name,
-  $password,
-  $file,
-  $ensure = present,
+  $user       = $name,
+  $password   = undef,
+  $file       = hiera('htpasswd_file', '/etc/apache2/htpasswd'),
+  $ensure     = present,
   $encryption = md5
 
 ) {
+
+  if ! $password {
+    fail('htpasswd::user needs password parameter.')
+  }
 
   include apache2::utils
 
